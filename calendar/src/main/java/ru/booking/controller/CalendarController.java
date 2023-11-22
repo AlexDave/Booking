@@ -1,11 +1,22 @@
 package ru.booking.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.booking.entity.Calendar;
 import ru.booking.service.CalendarService;
 
-import java.util.Collection;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(value = "/calendar")
@@ -14,24 +25,72 @@ public class CalendarController {
     @Autowired
     CalendarService calendarService;
 
-    @GetMapping("/all")
-    public Collection<Calendar> allRegister(){
+    @GetMapping("/findAll")
+    public Collection<Calendar> findAll() {
         return calendarService.findAll();
     }
 
-    @PostMapping("/findAll")
-    public Collection<Calendar> findByDates(@RequestBody Calendar calendar){
-        return calendarService.findCalendarsByDates(calendar.getCheckin(), calendar.getCheckout());
+    @GetMapping(value = "/findFreeDates", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findFreeDatesById(@RequestParam("id") String id) {
+        List<LocalDate> listFreeDates;
+        Calendar calendar = calendarService.findCalendarById(id);
+        if (calendar.getCheckout().isEmpty()) {
+            listFreeDates = getListFromNowDate();
+        } else {
+            listFreeDates = getFreeDates(calendar.getCheckin(), calendar.getCheckout());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("freeDate", listFreeDates));
     }
 
-    @PostMapping("/findOne")
-    public Calendar findById(@RequestParam("id") String id){
-        return calendarService.findCalendarById(id);
+
+    /**
+     * Получаю список дат, доступных для бронирования.
+     *
+     * @param checkIn  дата начала брони
+     * @param checkOut дата окончания брони
+     * @return список дат, доступных для бронирования
+     */
+    private static List<LocalDate> getFreeDates(String checkIn, String checkOut) {
+        List<LocalDate> listFromDB = getListFromDB(checkIn, checkOut);
+        List<LocalDate> listFromNowDate = getListFromNowDate();
+        listFromNowDate.removeAll(listFromDB);
+        return listFromNowDate;
     }
 
-    @PostMapping("/status")
-    public Collection<Calendar> findStatusIsEmpty(@RequestParam("status") String status){
-        return calendarService.findCalendarsByStatus(status);
+    /**
+     * Получаю данные из БД.
+     *
+     * @param checkIn  дата начала брони
+     * @param checkOut дата окончания брони
+     * @return список всех дат за период
+     */
+    private static List<LocalDate> getListFromDB(String checkIn, String checkOut) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(checkIn, formatter);
+        LocalDate endDate = LocalDate.parse(checkOut, formatter);
+        return getEveryDate(startDate, endDate);
     }
 
+    /**
+     * Получаю список всех дат с текущего дня плюс 30 дней.
+     *
+     * @return список всех дат за период
+     */
+    private static List<LocalDate> getListFromNowDate() {
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = startDate.plusDays(30);
+        return getEveryDate(startDate, endDate);
+    }
+
+    /**
+     * @param startDate начальная дата
+     * @param endDate   конечная дата
+     * @return список всех дат за период
+     */
+    private static List<LocalDate> getEveryDate(LocalDate startDate, LocalDate endDate) {
+        long numOfDays = ChronoUnit.DAYS.between(startDate, endDate);
+        return Stream.iterate(startDate, date -> date.plusDays(1))
+                .limit(numOfDays)
+                .collect(Collectors.toList());
+    }
 }
