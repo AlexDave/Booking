@@ -16,8 +16,8 @@ public interface CatalogRepository extends JpaRepository<Apartment, Long>, JpaSp
     List<Apartment> findByCity(String city);
     List<Apartment> findByPriceForDayIsLessThanEqual(Long sum);
 
- /*   List<Apartment> findByPetsFriendly(Boolean isAvailableForPets);
+    List<Apartment> findByPetsFriendly(Boolean isAvailableForPets);
 
-    List<Apartment> findByKidsFriendly(Boolean isAvailableForKids);*/
+    List<Apartment> findByKidsFriendly(Boolean isAvailableForKids);
 
 }

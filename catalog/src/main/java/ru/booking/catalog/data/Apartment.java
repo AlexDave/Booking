@@ -29,18 +29,18 @@ public class Apartment {
     private String address;
 
     @Column(name = "is_pets_friendly")
-    private boolean isPetsFriendly;
+    private boolean petsFriendly;
 
-    @Column(name = "isKidsFriendly")
-    private boolean isKidsFriendly;
+    @Column(name = "is_kids_friendly")
+    private boolean kidsFriendly;
 
 
     public Apartment(Long id, String city, String address, boolean isKidsFriendly, boolean isPetsFriendly) {
         this.id = id;
         this.city = city;
         this.address = address;
-        this.isKidsFriendly = isKidsFriendly;
-        this.isPetsFriendly = isPetsFriendly;
+        this.kidsFriendly = isKidsFriendly;
+        this.petsFriendly = isPetsFriendly;
     }
 
 

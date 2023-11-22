@@ -34,12 +34,12 @@ public class CatalogService {
         return catalogRepository.findByPriceForDayIsLessThanEqual(sum);
     };
 
- /*   public List<Apartment> findByPetsFriendly(Boolean isAvailableForPets) {
+   public List<Apartment> findByPetsFriendly(Boolean isAvailableForPets) {
         return catalogRepository.findByPetsFriendly(isAvailableForPets);
     };
 
     public List<Apartment> findByKidsAvailable(Boolean isAvailableForKids) {
         return catalogRepository.findByKidsFriendly(isAvailableForKids);
-    };*/
+    };
 
 }
