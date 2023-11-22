@@ -10,13 +10,11 @@ public class Calendar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+
     private String id;
 
     private String checkin;
 
     private String checkout;
-
-    private String status;
-
 
 }
