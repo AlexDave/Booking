@@ -7,19 +7,25 @@ GET http://localhost:19872/api/catalog?price=2000
 GET http://localhost:19872/api/catalog?city=Moscow
 
 ###
-GET http://localhost:19872/api/catalog?city=Moscow
+GET http://localhost:19872/api/catalog?petsFriendly=true
+
+###
+GET http://localhost:19872/api/catalog?kidsAvailable=true
 
 ###
 POST http://localhost:19872/api/catalog
 Content-Type: application/json
 
 {
-        "priceForDay": 888,
-        "city": "LA",
-        "address": "Lenin st",
-        "kidsFriendly":  true,
-        "petsFriendly": true
+  "priceForDay": 888,
+  "city": "LA",
+  "address": "Lenin st",
+  "kidsFriendly":  true,
+  "petsFriendly": true
 }
 
 ###
 DELETE http://localhost:19872/api/catalog/3
+
+###
+GET http://localhost:19872/api/catalog/freeDates?id=3

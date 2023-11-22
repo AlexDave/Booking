@@ -17,6 +17,9 @@ spring:
       settings:
         web-allow-others: false
 
+calendar:
+  url: http://localhost:8080/calendar/findFreeDates
+
 server:
   servlet:
     context-path:

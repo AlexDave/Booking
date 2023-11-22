@@ -1,8 +1,13 @@
 package ru.booking.catalog.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import ru.booking.catalog.data.Apartment;
+import ru.booking.catalog.model.response.FreeDates;
 import ru.booking.catalog.service.CatalogService;
 
 import java.util.List;
@@ -18,9 +23,26 @@ public class CatalogController {
         this.catalogService = catalogService;
     }
 
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
+
     @GetMapping
     public List<Apartment> getApartments() {
         return catalogService.findAllApartments();
+    }
+
+    @Value("${calendar.url}")
+    private String devUrl;
+
+    @GetMapping(path = "/freeDates", params = {"id"})
+    public FreeDates getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
+
+        return restTemplate.getForObject(
+        devUrl + "?id=" + id, FreeDates.class);
+
+
     }
 
     @GetMapping(params = {"city"})
@@ -33,7 +55,7 @@ public class CatalogController {
         return catalogService.findByPriceForDayIsLessThanEqual(price);
     }
 
-    /*@GetMapping(params = {"petsFriendly"})
+    @GetMapping(params = {"petsFriendly"})
     public List<Apartment> getApartmentsWithPetsFilter(@RequestParam(value = "petsFriendly") Boolean isAvailableForPets) {
         return catalogService.findByPetsFriendly(isAvailableForPets);
     }
