@@ -13,32 +13,39 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-public class AuthController {
+@RestController
+@RequestMapping(path = "api/user")
+public class UserController {
 
     private UserService userService;
 
-    public AuthController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("index")
-    public String home(){
-        return "index";
-    }
+//    @GetMapping("index")
+//    public String home(){
+//        return "index";
+//    }
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login";
-    }
+//    @GetMapping("/login")
+//    public String loginForm() {
+//        return "login";
+//    }
 
     // handler method to handle user registration request
-    @GetMapping("register")
-    public String showRegistrationForm(Model model){
-        UserDto user = new UserDto();
-        model.addAttribute("user", user);
-        return "register";
+    @PostMapping("/register")
+    public Long register(UserDto userDto){
+        User user = userService.saveUser(User.builder()
+                .email(userDto.getEmail())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .password(userDto.getPassword())
+                .build());
+        return user.getId();
     }
 
     // handler method to handle register user form submit request

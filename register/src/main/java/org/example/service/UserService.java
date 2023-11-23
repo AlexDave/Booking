@@ -1,13 +1,41 @@
 package org.example.service;
 
+
 import java.util.List;
-import org.example.dto.UserDto;
 import org.example.entity.User;
+import org.example.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-public interface UserService {
-    void saveUser(UserDto userDto);
+@Service
+public class UserService {
 
-    User findByEmail(String email);
+    private UserRepository userRepository;
 
-    List<UserDto> findAllUsers();
+    private PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+
+    public User saveUser(User user) {
+
+        //user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+       return userRepository.save(user);
+    }
+
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+
+    }
 }

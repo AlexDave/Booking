@@ -1,6 +1,7 @@
 package org.example.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name="users")
+@Builder
 public class User
 {
     private static final long serialVersionUID = 1L;
@@ -23,7 +25,10 @@ public class User
     private Long id;
 
     @Column(nullable=false)
-    private String name;
+    private String firstName;
+
+    @Column(nullable=false)
+    private String lastName;
 
     @Column(nullable=false, unique=true)
     private String email;
@@ -31,11 +36,11 @@ public class User
     @Column(nullable=false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-    @JoinTable(
-            name="users_roles",
-            joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
-            inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
-    private List<Role> roles = new ArrayList<>();
+//    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+//    @JoinTable(
+//            name="users_roles",
+//            joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},
+//            inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
+//    private List<Role> roles = new ArrayList<>();
 
 }
