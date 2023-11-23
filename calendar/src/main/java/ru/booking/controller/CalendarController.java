@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.booking.entity.Calendar;
 import ru.booking.service.CalendarService;
 
@@ -25,9 +22,18 @@ public class CalendarController {
     @Autowired
     CalendarService calendarService;
 
-    @GetMapping("/findAll")
-    public Collection<Calendar> findAll() {
-        return calendarService.findAll();
+
+
+    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Calendar> createUser(@RequestBody Calendar calendar) {
+        Calendar savedCalendar = calendarService.createCalendar(calendar);
+        return new ResponseEntity<>(savedCalendar, HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Calendar> updateBooking(@RequestBody Calendar calendar) {
+        Calendar updCalendar = calendarService.updateCalendar(calendar);
+        return new ResponseEntity<>(updCalendar, HttpStatus.OK);
     }
 
     @GetMapping(value = "/findFreeDates", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,6 +46,11 @@ public class CalendarController {
             listFreeDates = getFreeDates(calendar.getCheckin(), calendar.getCheckout());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("freeDate", listFreeDates));
+    }
+
+    @GetMapping("/findAll")
+    public Collection<Calendar> findAll() {
+        return calendarService.findAll();
     }
 
 
