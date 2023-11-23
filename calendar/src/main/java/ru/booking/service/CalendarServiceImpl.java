@@ -14,6 +14,18 @@ public class CalendarServiceImpl implements CalendarService {
     private CalendarRepository calendarRepository;
 
     @Override
+    public Calendar createCalendar(Calendar calendar) {
+        calendarRepository.createCalendar(calendar.getId(), calendar.getCheckin(), calendar.getCheckout());
+        return calendar;
+    }
+
+    @Override
+    public Calendar updateCalendar(Calendar calendar) {
+        calendarRepository.updateCalendar(calendar.getId(), calendar.getCheckin(), calendar.getCheckout());
+        return calendar;
+    }
+
+    @Override
     public Calendar findCalendarById(String id) {
         return calendarRepository.findCalendarById(id);
     }
@@ -22,8 +34,4 @@ public class CalendarServiceImpl implements CalendarService {
     public Collection<Calendar> findAll() {
         return calendarRepository.findAll();
     }
-
-
-
-
 }
