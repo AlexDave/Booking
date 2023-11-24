@@ -15,10 +15,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import java.util.UUID;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Notification api", description = "Api for user notifications")
@@ -41,12 +46,24 @@ public class NotificationController {
     @Operation(
             summary = "Send notification with info from body",
             description = "Send notification to recipient with subject and message from body.")
+
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<NotificationResponse> getNotification(@PathVariable String id) {
+        Notification notification= notificationService.getById(id);
+        return ResponseEntity.ok(NotificationResponse.builder()
+                .id(notification.getId())
+                .status(notification.getStatus())
+                .build());
+    }
+    @Operation(
+            summary = "Send notification with info from body",
+            description = "Send notification to recipient with subject and message from body.")
     @ApiResponses({
             @ApiResponse(responseCode = "400", content = {@Content(schema = @Schema(implementation = NotificationResponse.class))}),
             @ApiResponse(responseCode = "200", content = {@Content(schema = @Schema())})})
 
     @PostMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<NotificationResponse> getRoom(@RequestBody NotificationDetail detail) {
+    public ResponseEntity<NotificationResponse> sendNotification(@RequestBody NotificationDetail detail) {
         Notification notification = notificationMapper.notificationDetailToNotification(detail);
         List<String> validatorResult = validator.validate(notification);
         if (!validatorResult.isEmpty()) {
@@ -55,9 +72,11 @@ public class NotificationController {
                     .status("Error")
                     .build());
         }
+        notification.setId(UUID.randomUUID().toString());
         notificationService.sendSimpleNotification(notification);
         return ResponseEntity.ok(NotificationResponse.builder()
-                .status("Good")
+                 .id(notification.getId())
+                .status("InProgress")
                 .build());
     }
 }

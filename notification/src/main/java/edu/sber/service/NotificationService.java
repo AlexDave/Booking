@@ -3,6 +3,8 @@ package edu.sber.service;
 import edu.sber.model.Notification;
 import edu.sber.repository.NotificationRepository;
 import java.util.List;
+import java.util.UUID;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,6 +27,7 @@ public class NotificationService {
 
     @Async
     public void sendSimpleNotification(Notification notification) {
+
         notification.setRetryNum(notification.getRetryNum() + 1);
         notification = notificationRepository.save(notification.setStatus("InProgress"));
 
@@ -54,6 +57,10 @@ public class NotificationService {
                 sendSimpleNotification(notification);
             }
         }
+    }
+
+    public Notification getById(String id){
+        return notificationRepository.findById(id).get();
     }
 
 }

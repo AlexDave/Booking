@@ -1,0 +1,25 @@
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:user_db
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      path: /h2-console
+      settings.trace: false
+      settings.web-allow-others: false
+      enabled: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+    hibernate:
+      ddl-auto: create-drop
+
+
+server:
+  port: 7070
+
+

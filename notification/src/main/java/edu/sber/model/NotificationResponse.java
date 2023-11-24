@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 public class NotificationResponse {
 
+    private String id;
     private String status;
     private List<String> errorList;
 }

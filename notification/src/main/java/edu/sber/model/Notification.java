@@ -27,7 +27,6 @@ import lombok.experimental.Accessors;
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String recipient;
