@@ -7,6 +7,10 @@ import org.springframework.web.client.RestTemplate;
 import ru.booking.order.api.model.Notification;
 import ru.booking.order.api.model.User;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class UserConsumer {
 
@@ -16,11 +20,11 @@ public class UserConsumer {
 	public String getEmailUser(Long userId) {
 		RestTemplate restTemplate = new RestTemplate();
 
+		User response = restTemplate.getForObject(userUrl, User.class, userId);
 
-		HttpEntity<User> request = new HttpEntity<>(new User(userId));
-		User response = restTemplate.postForObject(userUrl, request, User.class);
+		System.out.println(response);
 
 		assert response != null;
-		return response.getEmail();
+		return response.email();
 	}
 }

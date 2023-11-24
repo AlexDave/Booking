@@ -41,7 +41,7 @@ public class OrderController {
 	@PostMapping
 	public void addNewOrder(@RequestBody Order order) {
 		orderService.addNewOrder(order);
-		calendarConsumer.bookingDate(order.getRealEstateId(), order.getOrderDateTo(), order.getOrderDateTo());
+		calendarConsumer.bookingDate(order.getRealEstateId(), order.getOrderDateFrom(), order.getOrderDateTo());
 
 		String userEmail = userConsumer.getEmailUser(order.getUserId());
 

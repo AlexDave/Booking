@@ -5,13 +5,22 @@ import java.util.Date;
 public class Calendar {
 
 	private Long id;
-	private Date checkIn;
-	private Date checkOut;
+	private String checkin;
+	private String checkout;
 
-	public Calendar(Long id, Date checkIn, Date checkOut) {
+	@Override
+	public String toString() {
+		return "Calendar{" +
+				"id=" + id +
+				", checkin=" + checkin +
+				", checkout=" + checkout +
+				'}';
+	}
+
+	public Calendar(Long id, String checkin, String checkout) {
 		this.id = id;
-		this.checkIn = checkIn;
-		this.checkOut = checkOut;
+		this.checkin = checkin;
+		this.checkout = checkout;
 	}
 
 	public Long getId() {
@@ -22,19 +31,19 @@ public class Calendar {
 		this.id = id;
 	}
 
-	public Date getCheckIn() {
-		return checkIn;
+	public String getCheckin() {
+		return checkin;
 	}
 
-	public void setCheckIn(Date checkIn) {
-		this.checkIn = checkIn;
+	public void setCheckin(String checkin) {
+		this.checkin = checkin;
 	}
 
-	public Date getCheckOut() {
-		return checkOut;
+	public String getCheckout() {
+		return checkout;
 	}
 
-	public void setCheckOut(Date checkOut) {
-		this.checkOut = checkOut;
+	public void setCheckout(String checkout) {
+		this.checkout = checkout;
 	}
 }

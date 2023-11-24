@@ -1,31 +1,5 @@
 package ru.booking.order.api.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class User {
-	private Long id;
-	private String email;
-
-	public User(Long id) {
-		this.id = id;
-	}
-
-	public User(Long id, String email) {
-		this.id = id;
-		this.email = email;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-}
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record User(Long id, String email) { }
