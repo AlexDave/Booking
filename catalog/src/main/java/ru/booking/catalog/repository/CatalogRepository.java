@@ -20,4 +20,6 @@ public interface CatalogRepository extends JpaRepository<Apartment, Long>, JpaSp
 
     List<Apartment> findByKidsFriendly(Boolean isAvailableForKids);
 
+    Apartment findApartmentById(Long id);
+
 }

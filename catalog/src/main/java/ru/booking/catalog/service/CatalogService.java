@@ -1,12 +1,14 @@
 package ru.booking.catalog.service;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.booking.catalog.data.Apartment;
+import ru.booking.catalog.model.ApartmentResponse;
+import ru.booking.catalog.model.Catalog;
+import ru.booking.catalog.model.FreeDates;
 import ru.booking.catalog.repository.CatalogRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,8 +16,12 @@ import java.util.List;
 public class CatalogService {
 
     private final CatalogRepository catalogRepository;
-    public List<Apartment> findAllApartments() {
-        return catalogRepository.findAll();
+    public Catalog findAllApartments() {
+        return new Catalog(catalogRepository.findAll());
+    }
+
+    public Apartment findApartmentById(Long id) {
+        return catalogRepository.findApartmentById(id);
     }
 
     public void addNewApartment(Apartment apartment) {
@@ -26,20 +32,35 @@ public class CatalogService {
         catalogRepository.deleteById(apartmentId);
     }
 
-    public List<Apartment> findByCity(String city) {
-        return catalogRepository.findByCity(city);
+    public Catalog findByCity(String city) {
+        return new Catalog(catalogRepository.findByCity(city));
     };
 
-    public List<Apartment> findByPriceForDayIsLessThanEqual(Long sum) {
-        return catalogRepository.findByPriceForDayIsLessThanEqual(sum);
+    public Catalog findByPriceForDayIsLessThanEqual(Long sum) {
+        return new Catalog(catalogRepository.findByPriceForDayIsLessThanEqual(sum));
     };
 
-   public List<Apartment> findByPetsFriendly(Boolean isAvailableForPets) {
-        return catalogRepository.findByPetsFriendly(isAvailableForPets);
+   public Catalog findByPetsFriendly(Boolean isAvailableForPets) {
+       return new Catalog(catalogRepository.findByPetsFriendly(isAvailableForPets));
     };
 
-    public List<Apartment> findByKidsAvailable(Boolean isAvailableForKids) {
-        return catalogRepository.findByKidsFriendly(isAvailableForKids);
+    public Catalog findByKidsAvailable(Boolean isAvailableForKids) {
+        return new Catalog(catalogRepository.findByKidsFriendly(isAvailableForKids));
     };
+
+    /*public String getInfoAboutApartment(Long id, FreeDates freeDates){
+        Apartment apartment = findApartmentById(id);
+        String availableForKids = apartment.isKidsFriendly() ? "да" : "нет";
+        String petsFriendly = apartment.isPetsFriendly() ? "да" : "нет";
+        return "Апартаменты по адресу " + apartment.getAddress() + " в городе " + apartment.getCity() + "\n" +
+                "Доступно к бронированию с детьми? " + availableForKids + "\n" +
+                "Доступно проживание с домашними животными? " + petsFriendly + "\n" +
+                "Даты, доступные к бронированию: " + freeDates.toString();
+    }*/
+
+    public ApartmentResponse getInfoAboutApartment(Long id, FreeDates freeDates){
+        Apartment apartment = findApartmentById(id);
+        return new ApartmentResponse(apartment, freeDates);
+    }
 
 }

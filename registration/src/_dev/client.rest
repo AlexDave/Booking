@@ -1,0 +1,7 @@
+GET http://localhost:7070/api/catalog
+
+###
+GET http://localhost:7070/api/catalog/searchByCity?city=Moscow
+
+###
+GET http://localhost:7070/api/catalog/getFreeDatesForApartment?id=3

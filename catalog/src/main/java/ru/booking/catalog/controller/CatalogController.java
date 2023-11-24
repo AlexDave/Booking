@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.booking.catalog.data.Apartment;
-import ru.booking.catalog.model.response.FreeDates;
+import ru.booking.catalog.model.ApartmentResponse;
+import ru.booking.catalog.model.Catalog;
+import ru.booking.catalog.model.FreeDates;
 import ru.booking.catalog.service.CatalogService;
 
 import java.util.List;
@@ -29,39 +31,59 @@ public class CatalogController {
     }
 
     @GetMapping
-    public List<Apartment> getApartments() {
+    public Catalog getApartments() {
         return catalogService.findAllApartments();
     }
 
     @Value("${calendar.url}")
     private String devUrl;
 
-    @GetMapping(path = "/freeDates", params = {"id"})
-    public FreeDates getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
+    /*@GetMapping(path = "/freeDates", params = {"id"})
+    public String getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
 
-        return restTemplate.getForObject(
+
+        FreeDates freeDates = restTemplate.getForObject(
         devUrl + "?id=" + id, FreeDates.class);
+        assert freeDates != null;
+        return catalogService.getInfoAboutApartment(id, freeDates);
 
+    }*/
+
+    @GetMapping(path = "/getInfoWithFreeDates", params = {"id"})
+    public ApartmentResponse getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
+
+
+        FreeDates freeDates = restTemplate.getForObject(
+                devUrl + "?id=" + id, FreeDates.class);
+        assert freeDates != null;
+        return catalogService.getInfoAboutApartment(id, freeDates);
+
+    }
+
+    @GetMapping(path = "/getInfo", params = {"id"})
+    public Apartment getInfoAboutApartment(@RequestParam(value = "id") Long id) {
+
+        return catalogService.findApartmentById(id);
 
     }
 
     @GetMapping(params = {"city"})
-    public List<Apartment> getApartmentsByCity(@RequestParam(value = "city") String city) {
+    public Catalog getApartmentsByCity(@RequestParam(value = "city") String city) {
         return catalogService.findByCity(city);
     }
 
     @GetMapping(params = {"price"})
-    public List<Apartment> getApartmentsByPrice(@RequestParam(value = "price") Long price) {
+    public Catalog getApartmentsByPrice(@RequestParam(value = "price") Long price) {
         return catalogService.findByPriceForDayIsLessThanEqual(price);
     }
 
     @GetMapping(params = {"petsFriendly"})
-    public List<Apartment> getApartmentsWithPetsFilter(@RequestParam(value = "petsFriendly") Boolean isAvailableForPets) {
+    public Catalog getApartmentsWithPetsFilter(@RequestParam(value = "petsFriendly") Boolean isAvailableForPets) {
         return catalogService.findByPetsFriendly(isAvailableForPets);
     }
 
     @GetMapping(params = {"kidsAvailable"})
-    public List<Apartment> getApartmentsWithKidsFilter(@RequestParam(value = "kidsAvailable") Boolean isAvailableForKids) {
+    public Catalog getApartmentsWithKidsFilter(@RequestParam(value = "kidsAvailable") Boolean isAvailableForKids) {
         return catalogService.findByKidsAvailable(isAvailableForKids);
     }
 
