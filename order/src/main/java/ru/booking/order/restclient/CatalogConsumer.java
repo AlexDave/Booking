@@ -21,6 +21,8 @@ public class CatalogConsumer {
 		String response = "Город: " + catalog.city() + "; Адрес: " + catalog.address() +
 				"; Цена за одну ночь: " + catalog.priceForDay();
 
+		System.out.println(response);
+
 		return  response;
 	}
 }

@@ -22,9 +22,6 @@ public class Order {
 	private Integer statusId;
 
 
-	public Order() {
-
-	}
 
 	public Order(UUID id,Long userId, Long realEstateId, String orderCategory, String orderName, Float orderPrice,
 				 Date dateFrom, Date dateTo, Integer statusId) {
@@ -38,15 +35,17 @@ public class Order {
 		this.statusId = statusId;
 	}
 
-	public Order(Long userId, Long realEstateId, String orderCategory, Float orderPrice, Date orderDateFrom,
-				 Date orderDateTo, Integer statusId) {
+	public Order(Long userId, Long realEstateId, Date orderDateFrom, Date orderDateTo) {
 		this.userId = userId;
 		this.realEstateId = realEstateId;
-		this.orderCategory = orderCategory;
-		this.orderPrice = orderPrice;
 		this.orderDateFrom = orderDateFrom;
 		this.orderDateTo = orderDateTo;
-		this.statusId = statusId;
+		this.statusId = 1;
+		this.orderCategory = "Booking";
+	}
+
+	public Order() {
+
 	}
 
 

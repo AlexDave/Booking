@@ -1,7 +1,36 @@
-GET http://localhost:7070/api/catalog
 
 ###
-GET http://localhost:7070/api/catalog/searchByCity?city=Moscow
+POST http://localhost:7070/api/user/register
+Content-Type: application/json
+
+{
+  "firstName": "Dave",
+  "lastName": "Alik",
+  "email": "alik@mail.ru",
+  "password": "asdasd"
+}
 
 ###
-GET http://localhost:7070/api/catalog/getFreeDatesForApartment?id=3
+GET http://localhost:7070/catalog
+
+###
+GET http://localhost:7070/catalog/searchByCity?city=Moscow
+
+###
+GET http://localhost:7070/catalog/getFreeDatesForApartment?id=3
+
+###
+POST http://localhost:7070/order/create
+Content-Type: application/json
+
+{
+  "userId": "2",
+  "realEstateId": "1500",
+  "orderDateFrom": "2023-11-25",
+  "orderDateTo": "2023-11-29"
+}
+
+
+
+
+

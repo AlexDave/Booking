@@ -25,4 +25,7 @@ server:
 catalog:
   url: http://localhost:19872/api/catalog
 
+order:
+  url: http://localhost:1212/api/order
+
 
