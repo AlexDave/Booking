@@ -9,12 +9,13 @@ import lombok.Data;
 public class Calendar {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-
+    @Column(name = "id")
     private String id;
 
+    @Column(name = "checkin")
     private String checkin;
 
+    @Column(name = "checkout")
     private String checkout;
 
 }
