@@ -1,20 +1,18 @@
 package ru.booking.order.data;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
 public class Order {
 
 	@Id
-	@GeneratedValue
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 	private Long userId;
 	private Long realEstateId;
 	private String orderCategory;
@@ -28,7 +26,7 @@ public class Order {
 
 	}
 
-	public Order(Long id,Long userId, Long realEstateId, String orderCategory, String orderName, Float orderPrice,
+	public Order(UUID id,Long userId, Long realEstateId, String orderCategory, String orderName, Float orderPrice,
 				 Date dateFrom, Date dateTo, Integer statusId) {
 		this.id = id;
 		this.orderCategory = orderCategory;
@@ -52,11 +50,11 @@ public class Order {
 	}
 
 
-	public Long getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
