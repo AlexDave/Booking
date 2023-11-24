@@ -13,16 +13,21 @@ public class CalendarServiceImpl implements CalendarService {
     @Autowired
     private CalendarRepository calendarRepository;
 
-    @Override
-    public Calendar createCalendar(Calendar calendar) {
-        calendarRepository.createCalendar(calendar.getId(), calendar.getCheckin(), calendar.getCheckout());
-        return calendar;
-    }
+//    @Override
+//    public Calendar createCalendar(Calendar calendar) {
+//        calendarRepository.createCalendar(calendar.getId(), calendar.getCheckin(), calendar.getCheckout());
+//        return calendar;
+//    }
+//
+//    @Override
+//    public Calendar updateCalendar(Calendar calendar) {
+//        calendarRepository.updateCalendar(calendar.getId(), calendar.getCheckin(), calendar.getCheckout());
+//        return calendar;
+//    }
 
     @Override
-    public Calendar updateCalendar(Calendar calendar) {
-        calendarRepository.updateCalendar(calendar.getId(), calendar.getCheckin(), calendar.getCheckout());
-        return calendar;
+    public Calendar saveCalendar(Calendar calendar) {
+        return calendarRepository.save(calendar);
     }
 
     @Override

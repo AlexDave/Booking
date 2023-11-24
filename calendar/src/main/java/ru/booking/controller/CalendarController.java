@@ -24,17 +24,17 @@ public class CalendarController {
 
 
 
-    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Calendar> createUser(@RequestBody Calendar calendar) {
-        Calendar savedCalendar = calendarService.createCalendar(calendar);
-        return new ResponseEntity<>(savedCalendar, HttpStatus.CREATED);
-    }
-
-    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Calendar> updateBooking(@RequestBody Calendar calendar) {
-        Calendar updCalendar = calendarService.updateCalendar(calendar);
-        return new ResponseEntity<>(updCalendar, HttpStatus.OK);
-    }
+//    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Calendar> createBooking(@RequestBody Calendar calendar) {
+//        Calendar savedCalendar = calendarService.createCalendar(calendar);
+//        return new ResponseEntity<>(savedCalendar, HttpStatus.CREATED);
+//    }
+//
+//    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Calendar> updateBooking(@RequestBody Calendar calendar) {
+//        Calendar updCalendar = calendarService.updateCalendar(calendar);
+//        return new ResponseEntity<>(updCalendar, HttpStatus.OK);
+//    }
 
     @GetMapping(value = "/findFreeDates", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findFreeDatesById(@RequestParam("id") String id) {
@@ -51,6 +51,11 @@ public class CalendarController {
     @GetMapping("/findAll")
     public Collection<Calendar> findAll() {
         return calendarService.findAll();
+    }
+
+    @PostMapping("/save")
+    public void addBooking(@RequestBody Calendar calendar){
+        calendarService.saveCalendar(calendar);
     }
 
 
