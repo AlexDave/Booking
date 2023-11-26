@@ -7,18 +7,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import ru.booking.catalog.data.Apartment;
-import ru.booking.catalog.model.ApartmentResponse;
-import ru.booking.catalog.model.Catalog;
-import ru.booking.catalog.model.FreeDates;
+import ru.booking.catalog.dto.ApartmentWithFreeDatesDto;
+import ru.booking.catalog.dto.CatalogDto;
+import ru.booking.catalog.dto.FreeDatesDto;
 import ru.booking.catalog.service.CatalogService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/catalog")
 public class CatalogController {
 
     private final CatalogService catalogService;
+
+    @Value("${calendar.url}")
+    private String devUrl;
 
     @Autowired
     public CatalogController(CatalogService catalogService) {
@@ -31,33 +32,9 @@ public class CatalogController {
     }
 
     @GetMapping
-    public Catalog getApartments() {
+    public CatalogDto getCatalog() {
+
         return catalogService.findAllApartments();
-    }
-
-    @Value("${calendar.url}")
-    private String devUrl;
-
-    /*@GetMapping(path = "/freeDates", params = {"id"})
-    public String getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
-
-
-        FreeDates freeDates = restTemplate.getForObject(
-        devUrl + "?id=" + id, FreeDates.class);
-        assert freeDates != null;
-        return catalogService.getInfoAboutApartment(id, freeDates);
-
-    }*/
-
-    @GetMapping(path = "/getInfoWithFreeDates", params = {"id"})
-    public ApartmentResponse getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
-
-
-        FreeDates freeDates = restTemplate.getForObject(
-                devUrl + "?id=" + id, FreeDates.class);
-        assert freeDates != null;
-        return catalogService.getInfoAboutApartment(id, freeDates);
-
     }
 
     @GetMapping(path = "/getInfo", params = {"id"})
@@ -67,37 +44,41 @@ public class CatalogController {
 
     }
 
+    @GetMapping(path = "/getInfoWithFreeDates", params = {"id"})
+    public ApartmentWithFreeDatesDto getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
+
+
+        FreeDatesDto freeDates = restTemplate.getForObject(
+                devUrl + "?id=" + id, FreeDatesDto.class);
+        assert freeDates != null;
+        return catalogService.getInfoAboutApartment(id, freeDates);
+
+    }
+
+
+    //Поиск квартиры по фильтрам
     @GetMapping(params = {"city"})
-    public Catalog getApartmentsByCity(@RequestParam(value = "city") String city) {
+    public CatalogDto getApartmentsByCity(@RequestParam(value = "city") String city) {
         return catalogService.findByCity(city);
     }
 
     @GetMapping(params = {"price"})
-    public Catalog getApartmentsByPrice(@RequestParam(value = "price") Long price) {
+    public CatalogDto getApartmentsByPrice(@RequestParam(value = "price") Long price) {
         return catalogService.findByPriceForDayIsLessThanEqual(price);
     }
 
     @GetMapping(params = {"petsFriendly"})
-    public Catalog getApartmentsWithPetsFilter(@RequestParam(value = "petsFriendly") Boolean isAvailableForPets) {
+    public CatalogDto getApartmentsWithPetsFilter(@RequestParam(value = "petsFriendly") Boolean isAvailableForPets) {
         return catalogService.findByPetsFriendly(isAvailableForPets);
     }
 
     @GetMapping(params = {"kidsAvailable"})
-    public Catalog getApartmentsWithKidsFilter(@RequestParam(value = "kidsAvailable") Boolean isAvailableForKids) {
+    public CatalogDto getApartmentsWithKidsFilter(@RequestParam(value = "kidsAvailable") Boolean isAvailableForKids) {
         return catalogService.findByKidsAvailable(isAvailableForKids);
     }
 
 
-/*    @GetMapping(value = "/petsFriendly")
-    public List<Apartment> getApartmentsWithPets() {
-        return catalogService.findByPetsFriendly();
-    }
-
-/*    @GetMapping(params = {"kidsFriendly"})
-    public List<Apartment> getApartmentsWithKids() {
-        return catalogService.findByKidsFriendly();
-    }*/
-
+    //CRUD-операции
     @PostMapping
     public void addNewApartment(@RequestBody Apartment apartment) {
         catalogService.addNewApartment(apartment);

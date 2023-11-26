@@ -1,6 +1,6 @@
 package edu.sber.controller;
 
-import edu.sber.dto.ApartmentDto;
+import edu.sber.dto.ApartmentWithFreeDatesDto;
 import edu.sber.dto.CatalogDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -37,12 +37,10 @@ public class SearchController {
     }
 
     @GetMapping(path = "/getFreeDatesForApartment", params = {"id"})
-    public ApartmentDto getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
+    public ApartmentWithFreeDatesDto getFreeDatesForApartment(RestTemplate restTemplate, @RequestParam(value = "id") Long id) {
 
-        catalogUrl = catalogUrl + "/getInfoWithFreeDates?id=" + id;
-        System.out.println(catalogUrl);
         return restTemplate.getForObject(
-                catalogUrl, ApartmentDto.class);
+                catalogUrl  + "/getInfoWithFreeDates?id=" + id, ApartmentWithFreeDatesDto.class);
 
     }
 

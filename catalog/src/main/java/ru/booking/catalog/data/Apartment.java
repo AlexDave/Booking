@@ -43,20 +43,4 @@ public class Apartment {
         this.petsFriendly = isPetsFriendly;
     }
 
-
-/*    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", realEstateId=" + realEstateId +
-                ", orderCategory='" + orderCategory + '\'' +
-                ", orderPrice=" + orderPrice +
-                ", orderDateFrom=" + orderDateFrom +
-                ", orderDateTo=" + orderDateTo +
-                ", statusId=" + statusId +
-                '}';
-    }
- */
-
 }

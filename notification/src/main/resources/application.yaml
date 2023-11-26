@@ -21,7 +21,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: raspberrypi.nueral.system@gmail.com
-    password: hsfl lbek wvtu tvcz1
+    password: hsfl lbek wvtu tvcz
     properties:
       mail:
         smtp:

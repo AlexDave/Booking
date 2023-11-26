@@ -1,8 +1,8 @@
-package ru.booking.catalog.model;
+package ru.booking.catalog.dto;
 
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record FreeDates(ArrayList<String> freeDate) { }
+public record FreeDatesDto(ArrayList<String> freeDate) { }

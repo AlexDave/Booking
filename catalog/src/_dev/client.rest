@@ -28,10 +28,10 @@ Content-Type: application/json
 DELETE http://localhost:19872/api/catalog/3
 
 ###
-GET http://localhost:19872/api/catalog/freeDates?id=1
+//GET http://localhost:19872/api/catalog/freeDates?id=1
 
 ###
 GET http://localhost:19872/api/catalog/getInfo?id=1
 
 ###
-GET http://localhost:19872/api/catalog/getInfoWithFreeDates?id=3
+GET http://localhost:19872/api/catalog/getInfoWithFreeDates?id=1
