@@ -13,16 +13,11 @@ public class CatalogConsumer {
 	@Value("${api.catalog.url}")
 	private String catalogUrl;
 
-	public String getInfo(Long realEstateId) {
+	public Catalog getInfo(Long realEstateId) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		Catalog catalog = restTemplate.getForObject(catalogUrl, Catalog.class, realEstateId);
-	
-		String response = "Город: " + catalog.city() + "; Адрес: " + catalog.address() +
-				"; Цена за одну ночь: " + catalog.priceForDay();
 
-		System.out.println(response);
-
-		return  response;
+		return catalog;
 	}
 }

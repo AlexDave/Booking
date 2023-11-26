@@ -1,12 +1,11 @@
-
 ###
 POST http://localhost:7070/api/user/register
 Content-Type: application/json
 
 {
-  "firstName": "Dave",
-  "lastName": "Alik",
-  "email": "alik@mail.ru",
+  "firstName": "Yandex",
+  "lastName": "Ya",
+  "email": "alikdave@gmail.com",
   "password": "asdasd"
 }
 
@@ -24,10 +23,10 @@ POST http://localhost:7070/order/create
 Content-Type: application/json
 
 {
-  "userId": "2",
-  "realEstateId": "1500",
-  "orderDateFrom": "2023-11-25",
-  "orderDateTo": "2023-11-29"
+  "userId": "4",
+  "realEstateId": "5",
+  "orderDateFrom": "2023-11-21",
+  "orderDateTo": "2023-11-27"
 }
 
 

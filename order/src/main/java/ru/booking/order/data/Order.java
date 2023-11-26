@@ -40,8 +40,6 @@ public class Order {
 		this.realEstateId = realEstateId;
 		this.orderDateFrom = orderDateFrom;
 		this.orderDateTo = orderDateTo;
-		this.statusId = 1;
-		this.orderCategory = "Booking";
 	}
 
 	public Order() {

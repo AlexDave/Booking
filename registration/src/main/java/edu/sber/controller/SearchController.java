@@ -23,8 +23,7 @@ public class SearchController {
     @GetMapping()
     public CatalogDto getCatalog(RestTemplate restTemplate) {
 
-        return restTemplate.getForObject(
-                catalogUrl, CatalogDto.class);
+        return restTemplate.getForObject(catalogUrl, CatalogDto.class);
 
     }
 
