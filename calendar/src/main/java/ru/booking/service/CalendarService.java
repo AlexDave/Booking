@@ -11,5 +11,5 @@ public interface CalendarService {
     Collection<Calendar> findAllBooking();
 
 
-
+    Collection<Calendar> findAllById(Long id);
 }

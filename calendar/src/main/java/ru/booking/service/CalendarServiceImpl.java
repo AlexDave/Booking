@@ -5,9 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.booking.entity.Calendar;
 import ru.booking.repository.CalendarRepository;
 
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 @Component
 public class CalendarServiceImpl implements CalendarService {
@@ -28,6 +26,11 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     public Collection<Calendar> findAllBooking() {
         return calendarRepository.findAll();
+    }
+
+    @Override
+    public Collection<Calendar> findAllById(Long id) {
+        return calendarRepository.findAllById(id);
     }
 
 }
