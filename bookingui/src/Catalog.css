@@ -1,0 +1,19 @@
+.catalog-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .loading-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .no-data-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: #dc3545;
+  }
+  
