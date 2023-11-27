@@ -19,11 +19,11 @@ GET http://localhost:7070/catalog/searchByCity?city=Moscow
 GET http://localhost:7070/catalog/getFreeDatesForApartment?id=2
 
 ### //Создание заявки на бронирование
-POST http://localhost:7070/order/create
+POST http://localhost:1212/api/order
 Content-Type: application/json
 
 {
-  "userId": "4",
+  "userId": "1",
   "realEstateId": "5",
   "orderDateFrom": "2023-11-21",
   "orderDateTo": "2023-11-27"

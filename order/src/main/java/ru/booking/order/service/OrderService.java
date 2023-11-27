@@ -24,6 +24,10 @@ public class OrderService {
 		return orderRepository.findAll();
 	}
 
+	public List<Order> findByUser(Long id){
+		return orderRepository.findByUserId(id);
+	}
+
 	//TODO FindByID
 
 	public void addNewOrder(Order order) {

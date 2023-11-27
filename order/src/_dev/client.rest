@@ -1,0 +1,14 @@
+###
+POST http://localhost:1212/api/order
+Content-Type: application/json
+
+{
+  "userId": "1",
+  "realEstateId": "2",
+  "orderDateFrom": "2023-11-25",
+  "orderDateTo": "2023-11-29"
+}
+
+
+###
+GET http://localhost:1212/api/order/getInfoByUser?id=1

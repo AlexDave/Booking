@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.booking.order.api.model.Catalog;
 import ru.booking.order.data.Order;
+import ru.booking.order.data.Results;
 import ru.booking.order.restclient.CalendarConsumer;
 import ru.booking.order.restclient.CatalogConsumer;
 import ru.booking.order.restclient.NotificationConsumer;
@@ -12,6 +13,7 @@ import ru.booking.order.restclient.UserConsumer;
 import ru.booking.order.service.OrderService;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,13 +36,43 @@ public class OrderController {
 	}
 
 
+	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping
 	public List<Order> getOrders() {
 		return orderService.getOrders();
 	}
 
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@GetMapping(path = "/getInfoByUser", params = {"id"})
+	public List<Results> getInfo(@RequestParam(value = "id") Long id) {
+
+		List<Order> orders = orderService.findByUser(id);
+
+
+		List<Results> results = new ArrayList<>();
+
+		orders.forEach(order -> {
+			Catalog catalog = catalogConsumer.getInfo(order.getRealEstateId());
+
+			String status = order.getStatusId() == 1 ? "Забронировано" : "Отклонено";
+
+			Results result = new Results(order.getId(),
+					catalog.city(),catalog.address(),order.getOrderDateFrom(),
+					order.getOrderDateTo(),catalog.priceForDay(),status);
+
+			results.add(result);
+		});
+
+
+
+		return results;
+
+	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping
-	public void addNewOrder(@RequestBody Order order) {
+	public Order addNewOrder(@RequestBody Order order) {
 		Catalog catalog = catalogConsumer.getInfo(order.getRealEstateId());
 
 		order.setOrderCategory("Booking");
@@ -59,6 +91,8 @@ public class OrderController {
 				"; Цена за одну ночь: " + catalog.priceForDay();
 
 		notificationConsumer.createNotification(userEmail,subject,message);
+
+		return order;
 	}
 
 	@DeleteMapping(path = "{orderId}")

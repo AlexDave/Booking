@@ -31,12 +31,14 @@ public class CatalogController {
         return builder.build();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping
     public CatalogDto getCatalog() {
 
         return catalogService.findAllApartments();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/getInfo", params = {"id"})
     public Apartment getInfoAboutApartment(@RequestParam(value = "id") Long id) {
 
