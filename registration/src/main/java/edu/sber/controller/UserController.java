@@ -24,8 +24,9 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     // handler method to handle user registration request
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
     public Long register(@RequestBody UserDto userDto){
         User user = userService.saveUser(User.builder()

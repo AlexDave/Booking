@@ -26,6 +26,11 @@ const Order = () => {
     fetchData();
   }, [id]);
 
+  const handleReturnToCatalog = () => {
+    // Используйте navigate для программной навигации
+    window.location.assign('/catalog/');
+  };
+
   return (
     <div className="order-container">
       <h2>Список бронирований</h2>
@@ -55,6 +60,8 @@ const Order = () => {
           ))}
         </tbody>
       </table>
+
+      <button onClick={handleReturnToCatalog}>Вернуться в каталог</button>
     </div>
   );
 };

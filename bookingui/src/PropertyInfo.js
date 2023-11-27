@@ -7,6 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './PropertyInfo.css';
 import { en } from "date-fns/locale/ru/index.js";
 import RandomImage from './RandomImage';
+import Cookies from 'js-cookie';
 
 const PropertyInfo = () => {
   const { id } = useParams();
@@ -55,14 +56,14 @@ const PropertyInfo = () => {
 
   const handleBooking = async () => {
     try {
-        
+
       const response = await fetch('http://localhost:1212/api/order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: 1,
+          userId: parseInt(Cookies.get('userId')),
           realEstateId: parseInt(id),
           orderDateFrom: startDate.toISOString().slice(0, 10),
           orderDateTo: endDate.toISOString().slice(0, 10),
@@ -75,7 +76,7 @@ const PropertyInfo = () => {
 
       // Добавьте обработку успешного ответа по необходимости
       console.log('Заказ успешно отправлен');
-      window.location.assign('/order/1');
+      window.location.assign('/order/'+Cookies.get('userId'));
 
     } catch (error) {
       console.error('Ошибка:', error);

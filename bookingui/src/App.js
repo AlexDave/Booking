@@ -9,9 +9,9 @@ import Order from './Order';
 import PropertyInfo from './PropertyInfo';
 
 export const App = () => (
-    
+
     <Routes>
-        <Route path="/order/:id">
+        <Route path="/order/">
             <Order />
         </Route>
         <Route path="/catalog/:id">

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './RegistrationForm.css'; // Импортируем файл стилей
+import Cookies from 'js-cookie';
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -17,21 +18,34 @@ const RegistrationForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Здесь можно добавить логику для обработки отправки формы
-    console.log('Отправленная форма:', formData);
-
-    fetch('http://localhost:7070/api/user/register', {  // Enter your IP address here
-
-      method: 'POST', 
-      mode: 'cors', 
-      body: JSON.stringify(formData) // body data type must match "Content-Type" header
-
-    })
-
-    window.location.assign('/catalog/');
-    
+  
+    try {
+      const response = await fetch('http://localhost:7070/api/user/register', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Не удалось зарегистрироваться');
+      }
+  
+      const responseData = await response.json();
+      console.log('Успешно зарегистрирован:', responseData);
+      Cookies.set('userId', responseData);
+  
+      // Здесь вы можете выполнить дополнительные действия после успешной регистрации
+      // Например, перенаправить пользователя на другую страницу
+      window.location.assign('/catalog/');
+    } catch (error) {
+      console.error('Ошибка при регистрации:', error.message);
+      // Здесь вы можете предпринять дополнительные шаги в случае ошибки
+    }
   };
 
   return (

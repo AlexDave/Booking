@@ -21,6 +21,7 @@ public class CalendarController {
     @Autowired
     CalendarService calendarService;
 
+
     @GetMapping( value = "/findFreeDates", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findFreeDatesById(@RequestParam("id") Long id) {
         List<LocalDate> listFreeDates = new ArrayList<>();
