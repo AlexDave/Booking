@@ -9,7 +9,6 @@ import ru.booking.entity.Calendar;
 import ru.booking.service.CalendarService;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,42 +21,45 @@ public class CalendarController {
     @Autowired
     CalendarService calendarService;
 
-
-
-//    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Calendar> createBooking(@RequestBody Calendar calendar) {
-//        Calendar savedCalendar = calendarService.createCalendar(calendar);
-//        return new ResponseEntity<>(savedCalendar, HttpStatus.CREATED);
-//    }
-//
-//    @PostMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Calendar> updateBooking(@RequestBody Calendar calendar) {
-//        Calendar updCalendar = calendarService.updateCalendar(calendar);
-//        return new ResponseEntity<>(updCalendar, HttpStatus.OK);
-//    }
-
-    @GetMapping(value = "/findFreeDates", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> findFreeDatesById(@RequestParam("id") String id) {
-        List<LocalDate> listFreeDates;
-        Calendar calendar = calendarService.findCalendarById(id);
-        if (calendar.getCheckout().isEmpty()) {
-            listFreeDates = getListFromNowDate();
-        } else {
-            listFreeDates = getFreeDates(calendar.getCheckin(), calendar.getCheckout());
+    @GetMapping( value = "/findFreeDates", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> findFreeDatesById(@RequestParam("id") Long id) {
+        List<LocalDate> listFreeDates = new ArrayList<>();
+        for(Calendar calendar: calendarService.findAllById(id)) {
+            if (calendar.getCheckout() == null) {
+                listFreeDates.addAll(getListFromNowDate());
+            } else {
+                for(LocalDate lc : getFreeDates(calendar.getCheckin(), calendar.getCheckout())){
+                    if (!listFreeDates.contains(lc)) {
+                        listFreeDates.add(lc);
+                    }
+                }
+                for(LocalDate lc: getEveryDate(calendar.getCheckin(), calendar.getCheckout())){
+                    listFreeDates.remove(lc);
+                }
+            }
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("freeDate", listFreeDates));
     }
 
     @GetMapping("/findAll")
-    public Collection<Calendar> findAll() {
-        return calendarService.findAll();
+    public Collection<Calendar> findAllBooking() {
+        return calendarService.findAllBooking();
+    }
+
+    @GetMapping("/findAllById")
+    public Collection<Calendar> findAllById(@RequestParam("id") Long id){
+        return calendarService.findAllById(id);
     }
 
     @PostMapping("/save")
-    public void addBooking(@RequestBody Calendar calendar){
-        calendarService.saveCalendar(calendar);
+    public int saveBooking(@RequestBody Calendar calendar) {
+        if(checkDates(calendar)) {
+            calendarService.saveCalendar(calendar);
+            return getEveryDate(calendar.getCheckin(), calendar.getCheckout()).size();
+        }else{
+            return -1;
+        }
     }
-
 
     /**
      * Получаю список дат, доступных для бронирования.
@@ -66,7 +68,7 @@ public class CalendarController {
      * @param checkOut дата окончания брони
      * @return список дат, доступных для бронирования
      */
-    private static List<LocalDate> getFreeDates(String checkIn, String checkOut) {
+    private static List<LocalDate> getFreeDates(LocalDate checkIn, LocalDate checkOut) {
         List<LocalDate> listFromDB = getListFromDB(checkIn, checkOut);
         List<LocalDate> listFromNowDate = getListFromNowDate();
         listFromNowDate.removeAll(listFromDB);
@@ -80,11 +82,11 @@ public class CalendarController {
      * @param checkOut дата окончания брони
      * @return список всех дат за период
      */
-    private static List<LocalDate> getListFromDB(String checkIn, String checkOut) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate startDate = LocalDate.parse(checkIn, formatter);
-        LocalDate endDate = LocalDate.parse(checkOut, formatter);
-        return getEveryDate(startDate, endDate);
+    private static List<LocalDate> getListFromDB(LocalDate checkIn, LocalDate checkOut) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        LocalDate startDate = LocalDate.parse(checkIn, formatter);
+//        LocalDate endDate = LocalDate.parse(checkOut, formatter);
+        return getEveryDate(checkIn, checkOut);
     }
 
     /**
@@ -109,4 +111,33 @@ public class CalendarController {
                 .limit(numOfDays)
                 .collect(Collectors.toList());
     }
+
+    private boolean checkDates(Calendar calendar){
+        for (Calendar c : calendarService.findAllById(calendar.getId())) {
+            if (checkAfter(calendar.getCheckin(),c.getCheckin()) && checkBefore(calendar.getCheckin(),c.getCheckout())) {
+                return false;
+            }
+            else if (checkAfter(calendar.getCheckout(),c.getCheckin()) && checkBefore(calendar.getCheckout(),c.getCheckout())) {
+                return false;
+            }
+            else if(checkBefore(calendar.getCheckin(),c.getCheckin()) && checkAfter(calendar.getCheckout(),c.getCheckout())){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkAfter(LocalDate ld1, LocalDate ld2){
+        return  ld1.equals(ld2) || ld1.isAfter(ld2);
+    }
+    private boolean checkBefore(LocalDate ld1, LocalDate ld2){
+        return  ld1.equals(ld2) || ld1.isBefore(ld2);
+    }
+
+
+
+//    @GetMapping("/all")
+//    public Collection<Calendar> getAll(@RequestParam("id") Long id){
+//        return calendarService.findCalendars(id);
+//    }
 }
