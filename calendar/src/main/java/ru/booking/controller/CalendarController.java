@@ -21,19 +21,23 @@ public class CalendarController {
     @Autowired
     CalendarService calendarService;
 
-    @GetMapping( value = "/findFreeDates", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/findFreeDates", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> findFreeDatesById(@RequestParam("id") Long id) {
         List<LocalDate> listFreeDates = new ArrayList<>();
-        for(Calendar calendar: calendarService.findAllById(id)) {
+        if (calendarService.findAllById(id).isEmpty()) {
+            listFreeDates = getListFromNowDate();
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("freeDate", listFreeDates));
+        }
+        for (Calendar calendar : calendarService.findAllById(id)) {
             if (calendar.getCheckout() == null) {
                 listFreeDates.addAll(getListFromNowDate());
             } else {
-                for(LocalDate lc : getFreeDates(calendar.getCheckin(), calendar.getCheckout())){
+                for (LocalDate lc : getFreeDates(calendar.getCheckin(), calendar.getCheckout())) {
                     if (!listFreeDates.contains(lc)) {
                         listFreeDates.add(lc);
                     }
                 }
-                for(LocalDate lc: getEveryDate(calendar.getCheckin(), calendar.getCheckout())){
+                for (LocalDate lc : getEveryDate(calendar.getCheckin(), calendar.getCheckout())) {
                     listFreeDates.remove(lc);
                 }
             }
@@ -47,16 +51,16 @@ public class CalendarController {
     }
 
     @GetMapping("/findAllById")
-    public Collection<Calendar> findAllById(@RequestParam("id") Long id){
+    public Collection<Calendar> findAllById(@RequestParam("id") Long id) {
         return calendarService.findAllById(id);
     }
 
     @PostMapping("/save")
     public int saveBooking(@RequestBody Calendar calendar) {
-        if(checkDates(calendar)) {
+        if (checkDates(calendar)) {
             calendarService.saveCalendar(calendar);
             return getEveryDate(calendar.getCheckin(), calendar.getCheckout()).size();
-        }else{
+        } else {
             return -1;
         }
     }
@@ -83,9 +87,6 @@ public class CalendarController {
      * @return список всех дат за период
      */
     private static List<LocalDate> getListFromDB(LocalDate checkIn, LocalDate checkOut) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//        LocalDate startDate = LocalDate.parse(checkIn, formatter);
-//        LocalDate endDate = LocalDate.parse(checkOut, formatter);
         return getEveryDate(checkIn, checkOut);
     }
 
@@ -101,6 +102,8 @@ public class CalendarController {
     }
 
     /**
+     * Получаю список всех дат за период.
+     *
      * @param startDate начальная дата
      * @param endDate   конечная дата
      * @return список всех дат за период
@@ -112,32 +115,44 @@ public class CalendarController {
                 .collect(Collectors.toList());
     }
 
-    private boolean checkDates(Calendar calendar){
+    /**
+     * Проверка нахождения дат в периодах.
+     *
+     * @param calendar календарь
+     * @return true or false
+     */
+    private boolean checkDates(Calendar calendar) {
         for (Calendar c : calendarService.findAllById(calendar.getId())) {
-            if (checkAfter(calendar.getCheckin(),c.getCheckin()) && checkBefore(calendar.getCheckin(),c.getCheckout())) {
+            if (checkAfter(calendar.getCheckin(), c.getCheckin()) && checkBefore(calendar.getCheckin(), c.getCheckout())) {
                 return false;
-            }
-            else if (checkAfter(calendar.getCheckout(),c.getCheckin()) && checkBefore(calendar.getCheckout(),c.getCheckout())) {
+            } else if (checkAfter(calendar.getCheckout(), c.getCheckin()) && checkBefore(calendar.getCheckout(), c.getCheckout())) {
                 return false;
-            }
-            else if(checkBefore(calendar.getCheckin(),c.getCheckin()) && checkAfter(calendar.getCheckout(),c.getCheckout())){
+            } else if (checkBefore(calendar.getCheckin(), c.getCheckin()) && checkAfter(calendar.getCheckout(), c.getCheckout())) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean checkAfter(LocalDate ld1, LocalDate ld2){
-        return  ld1.equals(ld2) || ld1.isAfter(ld2);
+    /**
+     * checkAfter.
+     *
+     * @param ld1 дата
+     * @param ld2 дата
+     * @return true or false
+     */
+    private boolean checkAfter(LocalDate ld1, LocalDate ld2) {
+        return ld1.equals(ld2) || ld1.isAfter(ld2);
     }
-    private boolean checkBefore(LocalDate ld1, LocalDate ld2){
-        return  ld1.equals(ld2) || ld1.isBefore(ld2);
+
+    /**
+     * checkBefore.
+     *
+     * @param ld1 дата
+     * @param ld2 дата
+     * @return true or false
+     */
+    private boolean checkBefore(LocalDate ld1, LocalDate ld2) {
+        return ld1.equals(ld2) || ld1.isBefore(ld2);
     }
-
-
-
-//    @GetMapping("/all")
-//    public Collection<Calendar> getAll(@RequestParam("id") Long id){
-//        return calendarService.findCalendars(id);
-//    }
 }
