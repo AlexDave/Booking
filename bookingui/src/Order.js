@@ -42,7 +42,7 @@ const Order = () => {
             <th>Адрес</th>
             <th>Дата с</th>
             <th>Дата по</th>
-            <th>Цена</th>
+            <th>Цена за ночь</th>
             <th>Статус</th>
           </tr>
         </thead>

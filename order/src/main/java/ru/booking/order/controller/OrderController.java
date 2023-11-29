@@ -88,7 +88,8 @@ public class OrderController {
 
 
 		String message = "Город: " + catalog.city() + "; Адрес: " + catalog.address() +
-				"; Цена за одну ночь: " + catalog.priceForDay();
+				"; Цена за одну ночь: " + catalog.priceForDay() + "; Дата заезда: "
+				+ order.getOrderDateFrom() + "; Дата выезда: " + order.getOrderDateTo();
 
 		notificationConsumer.createNotification(userEmail,subject,message);
 

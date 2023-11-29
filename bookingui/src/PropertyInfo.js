@@ -15,7 +15,6 @@ const PropertyInfo = () => {
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [blockedDates, setBlockedDates] = useState([]);
 
 
 
@@ -28,7 +27,6 @@ const PropertyInfo = () => {
         }
         const data = await response.json();
         setProperty(data);
-        setBlockedDates(['2023-01-11','2023-26-11']);
       } catch (error) {
         console.error('Ошибка:', error);
       } finally {
@@ -46,13 +44,7 @@ const PropertyInfo = () => {
     setEndDate(date);
   };
 
-  const filterDates = (date) => {
-    // Блокируем даты в диапазоне, который был получен с интеграции
-    return (
-      blockedDates.some((blockedDate) => date >= new Date(blockedDate.startDate) && date <= new Date(blockedDate.endDate)) ||
-      date < new Date() // Блокируем даты до текущей даты
-    );
-  };
+ 
 
   const handleBooking = async () => {
     try {
@@ -112,7 +104,6 @@ const PropertyInfo = () => {
             startDate={startDate}
             endDate={endDate}
             placeholderText="Дата заезда"
-            filterDate={filterDates}
           />
           <DatePicker
             dateFormat="dd-MM-yyyy"
@@ -123,7 +114,6 @@ const PropertyInfo = () => {
             startDate={startDate}
             endDate={endDate}
             placeholderText="Дата выезда"
-            filterDate={filterDates}
           />
           <button onClick={handleBooking}>Забронировать</button>
         </div>

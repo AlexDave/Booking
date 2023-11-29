@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "firstName": "Yandex",
   "lastName": "Ya",
-  "email": "sddf@gmail.com",
+  "email": "alikdave@gmail.com",
   "password": "asdasd"
 }
 
@@ -16,14 +16,14 @@ GET http://localhost:7070/catalog
 GET http://localhost:7070/catalog/searchByCity?city=Moscow
 
 ### //Получение данных по конкретной квартире, включающих список свободных для бронирования дат
-GET http://localhost:7070/catalog/getFreeDatesForApartment?id=2
+GET http://localhost:7070/catalog/getFreeDatesForApartment?id=1
 
 ### //Создание заявки на бронирование
 POST http://localhost:1212/api/order
 Content-Type: application/json
 
 {
-  "userId": "1",
+  "userId": "2",
   "realEstateId": "5",
   "orderDateFrom": "2023-11-21",
   "orderDateTo": "2023-11-27"
